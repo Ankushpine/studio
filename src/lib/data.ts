@@ -81,37 +81,4 @@ This practice helps anchor you in the present.`,
 5. Spend a few moments on each body part, simply noticing how it feels.`,
     imageUrl: 'exercise-4',
   },
-  {
-    id: '5',
-    title: 'Loving-Kindness Meditation',
-    category: 'Meditation',
-    description: `1. Sit comfortably and close your eyes.
-2. Bring to mind someone you care about deeply.
-3. Silently repeat phrases like: "May you be happy. May you be healthy. May you be safe."
-4. Extend these wishes to yourself, then to a neutral person, and finally to all living beings.`,
-    imageUrl: 'exercise-5',
-  },
-  {
-    id: '6',
-    title: 'Mindful Walking',
-    category: 'Movement',
-    description: `1. Find a space where you can walk back and forth.
-2. Walk at a slow, natural pace.
-3. Pay attention to the sensation of your feet touching the ground.
-4. Notice the movement in your legs and the rest of your body.
-5. When your mind wanders, gently bring it back to the sensation of walking.`,
-    imageUrl: 'exercise-6',
-  },
-  {
-    id: '7',
-    title: 'Mindful Eating',
-    category: 'Observation',
-    description: `1. Take a piece of food, like a raisin or a slice of fruit.
-2. Look at it as if you've never seen it before. Notice its texture and color.
-3. Smell it. What do you notice?
-4. Place it in your mouth but don't chew yet. Notice the sensations.
-5. Chew slowly, paying attention to the taste and texture.
-6. Swallow and notice the sensation of the food moving down your throat.`,
-    imageUrl: 'exercise-7',
-  },
 ];

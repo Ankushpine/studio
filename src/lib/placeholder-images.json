@@ -23,24 +23,6 @@
       "description": "A peaceful nature scene for a body scan meditation.",
       "imageUrl": "https://picsum.photos/seed/104/600/400",
       "imageHint": "calm lake"
-    },
-    {
-      "id": "exercise-5",
-      "description": "An image conveying warmth and compassion for Loving-Kindness Meditation.",
-      "imageUrl": "https://picsum.photos/seed/105/600/400",
-      "imageHint": "sunrise heart"
-    },
-    {
-      "id": "exercise-6",
-      "description": "A photo of a path to illustrate the concept of mindful walking.",
-      "imageUrl": "https://picsum.photos/seed/106/600/400",
-      "imageHint": "walking path"
-    },
-    {
-      "id": "exercise-7",
-      "description": "A close-up of healthy food to represent mindful eating.",
-      "imageUrl": "https://picsum.photos/seed/107/600/400",
-      "imageHint": "fresh fruit"
     }
   ]
 }
