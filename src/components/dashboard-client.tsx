@@ -24,7 +24,10 @@ export function DashboardClient() {
     setHasLoggedMoodToday(state.moodLogs.some(
       (log) => new Date(log.date).toDateString() === today
     ));
-    setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    // Check if window is defined before using Math.random
+    if (typeof window !== 'undefined') {
+      setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
   }, [state.moodLogs]);
 
   return (

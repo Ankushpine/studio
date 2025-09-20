@@ -60,7 +60,7 @@ export function ChatbotClient() {
         <CardHeader>
           <CardTitle className="font-headline flex items-center gap-2">
             <Bot />
-            Zenith Bot
+            Clarity Bot
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden p-0">
@@ -71,7 +71,7 @@ export function ChatbotClient() {
                   <AvatarFallback><Bot size={20} /></AvatarFallback>
                 </Avatar>
                 <div className="rounded-lg bg-muted p-3 text-sm">
-                  <p>Hello! I'm Zenith Bot, your supportive companion. How are you feeling today?</p>
+                  <p>Hello! I'm Clarity Bot, your supportive companion. How are you feeling today?</p>
                 </div>
               </div>
               {messages.map((message, index) => (

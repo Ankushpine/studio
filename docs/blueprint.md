@@ -1,4 +1,4 @@
-# **App Name**: Zenith Journal
+# **App Name**: Clarity Journal
 
 ## Core Features:
 

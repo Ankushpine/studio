@@ -33,7 +33,7 @@ const navItems = [
   { href: '/trends', icon: BarChart3, label: 'Trends' },
   { href: '/habits', icon: CheckSquare, label: 'Habits' },
   { href: '/exercises', icon: BrainCircuit, label: 'Exercises' },
-  { href: '/chatbot', icon: Bot, label: 'Zenith Bot' },
+  { href: '/chatbot', icon: Bot, label: 'Clarity Bot' },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
