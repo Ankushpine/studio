@@ -44,13 +44,11 @@ const prompt = ai.definePrompt({
   Keep responses short and to the point, never respond with more than 2 sentences.
 
   Here is the chat history:
+  {{#if chatHistory}}
   {{#each chatHistory}}
-  {{#if (this.role == "user")}}
-  User: {{{this.content}}}
-  {{else}}
-  Chatbot: {{{this.content}}}
-  {{/if}}
+  {{this.role}}: {{{this.content}}}
   {{/each}}
+  {{/if}}
 
   User: {{{message}}}
   Chatbot: `,

@@ -46,6 +46,7 @@ export function ChatbotClient() {
       const botMessage: Message = { role: 'assistant', content: response };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
+      console.log("Error",error)
       const errorMessage: Message = { role: 'assistant', content: "I'm sorry, I encountered an error. Please try again." };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
