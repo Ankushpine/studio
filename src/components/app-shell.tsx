@@ -47,7 +47,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Feather className="h-5 w-5 text-primary-foreground" />
             </div>
-            <h1 className="font-headline text-lg font-bold text-primary-foreground/90 group-data-[collapsible=icon]:hidden">
+            <h1 className="font-headline text-lg font-bold text-black group-data-[collapsible=icon]:hidden">
               Clarity Hub
             </h1>
           </div>
