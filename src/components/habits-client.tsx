@@ -93,6 +93,8 @@ export function HabitsClient() {
     toast({ title: 'Habit Deleted', description: 'The habit has been removed.' });
   };
 
+  const canEditHabits = isToday(selectedDate || new Date());
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2">
@@ -106,7 +108,7 @@ export function HabitsClient() {
             </div>
              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => handleOpenForm()}>
+                <Button onClick={() => handleOpenForm()} disabled={!canEditHabits}>
                   <Plus className="mr-2 h-4 w-4" />
                   New Habit
                 </Button>
@@ -157,14 +159,15 @@ export function HabitsClient() {
                         checked={habit.completed}
                         onCheckedChange={(checked) => handleHabitToggle(habit.id, !!checked)}
                         className="h-5 w-5"
+                        disabled={!canEditHabits}
                       />
                       <Label
                         htmlFor={`habit-${habit.id}-${selectedDateStr}`}
-                        className="ml-3 text-base font-medium flex-1 cursor-pointer"
+                        className={cn("ml-3 text-base font-medium flex-1", canEditHabits && "cursor-pointer")}
                       >
                         {habit.name}
                       </Label>
-                      {isToday(selectedDate || new Date()) && (
+                      {canEditHabits && (
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenForm(habit)}>
                               <Edit className="h-4 w-4" />
