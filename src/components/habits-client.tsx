@@ -23,6 +23,7 @@ import { Edit, Plus, Trash2 } from 'lucide-react';
 import { Habit } from '@/lib/types';
 import { Calendar } from './ui/calendar';
 import { format, isToday } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export function HabitsClient() {
   const { state, dispatch } = useApp();
