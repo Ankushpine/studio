@@ -13,7 +13,10 @@ interface AppState {
 type AppAction =
   | { type: 'ADD_MOOD_LOG'; payload: MoodLog }
   | { type: 'ADD_JOURNAL_ENTRY'; payload: JournalEntry }
-  | { type: 'TOGGLE_HABIT'; payload: string };
+  | { type: 'TOGGLE_HABIT'; payload: { id: string; completed: boolean } }
+  | { type: 'ADD_HABIT'; payload: Habit }
+  | { type: 'UPDATE_HABIT'; payload: Habit }
+  | { type: 'DELETE_HABIT'; payload: string };
 
 const initialState: AppState = {
   moodLogs: initialMoodLogs,
@@ -42,9 +45,26 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         habits: state.habits.map((habit) =>
-          habit.id === action.payload ? { ...habit, completed: !habit.completed } : habit
+          habit.id === action.payload.id ? { ...habit, completed: action.payload.completed } : habit
         ),
       };
+    case 'ADD_HABIT':
+      return {
+        ...state,
+        habits: [action.payload, ...state.habits],
+      };
+    case 'UPDATE_HABIT':
+        return {
+            ...state,
+            habits: state.habits.map((habit) =>
+                habit.id === action.payload.id ? action.payload : habit
+            ),
+        };
+    case 'DELETE_HABIT':
+        return {
+            ...state,
+            habits: state.habits.filter((habit) => habit.id !== action.payload),
+        };
     default:
       return state;
   }

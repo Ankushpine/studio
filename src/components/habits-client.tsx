@@ -1,56 +1,173 @@
 'use client';
 
+import { useState } from 'react';
 import { useApp } from './app-provider';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { Progress } from './ui/progress';
+import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
+import { Input } from './ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { Edit, Plus, Trash2 } from 'lucide-react';
+import { Habit } from '@/lib/types';
 
 export function HabitsClient() {
   const { state, dispatch } = useApp();
-  
-  const completedHabits = state.habits.filter(h => h.completed).length;
+  const { toast } = useToast();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+  const [habitName, setHabitName] = useState('');
+
+  const completedHabits = state.habits.filter((h) => h.completed).length;
   const totalHabits = state.habits.length;
   const progress = totalHabits > 0 ? (completedHabits / totalHabits) * 100 : 0;
 
-  const handleHabitToggle = (habitId: string) => {
-    dispatch({ type: 'TOGGLE_HABIT', payload: habitId });
+  const handleHabitToggle = (habitId: string, checked: boolean) => {
+    dispatch({ type: 'TOGGLE_HABIT', payload: { id: habitId, completed: checked } });
+  };
+
+  const handleOpenForm = (habit: Habit | null = null) => {
+    setEditingHabit(habit);
+    setHabitName(habit ? habit.name : '');
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setEditingHabit(null);
+    setHabitName('');
+  };
+
+  const handleSaveHabit = () => {
+    if (!habitName.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Habit name cannot be empty.',
+      });
+      return;
+    }
+
+    if (editingHabit) {
+      dispatch({
+        type: 'UPDATE_HABIT',
+        payload: { ...editingHabit, name: habitName },
+      });
+      toast({ title: 'Habit Updated', description: 'Your habit has been successfully updated.' });
+    } else {
+      const newHabit: Habit = {
+        id: Date.now().toString(),
+        name: habitName,
+        completed: false,
+      };
+      dispatch({ type: 'ADD_HABIT', payload: newHabit });
+      toast({ title: 'Habit Added', description: 'Your new habit has been successfully added.' });
+    }
+    handleCloseForm();
+  };
+
+  const handleDeleteHabit = (habitId: string) => {
+    dispatch({ type: 'DELETE_HABIT', payload: habitId });
+    toast({ title: 'Habit Deleted', description: 'The habit has been removed.' });
   };
 
   return (
     <div className="grid gap-6">
       <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">Habit Tracker</CardTitle>
-          <CardDescription>
-            Cultivate positive routines to support your well-being.
-          </CardDescription>
+        <CardHeader className="flex-row items-center justify-between">
+          <div>
+            <CardTitle className="font-headline">Habit Tracker</CardTitle>
+            <CardDescription>
+              Cultivate positive routines to support your well-being.
+            </CardDescription>
+          </div>
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => handleOpenForm()}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Habit
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="font-headline">
+                  {editingHabit ? 'Edit Habit' : 'New Habit'}
+                </DialogTitle>
+                <DialogDescription>
+                  {editingHabit ? 'Update the name of your habit.' : 'Add a new habit to track.'}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="py-4">
+                <Input
+                  id="habit-name"
+                  placeholder="e.g., Meditate for 10 minutes"
+                  value={habitName}
+                  onChange={(e) => setHabitName(e.target.value)}
+                />
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={handleCloseForm}>
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveHabit}>Save Habit</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-             <div className="space-y-2">
-                <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Progress</span>
-                    <span>{completedHabits} / {totalHabits} completed</span>
-                </div>
-                <Progress value={progress} aria-label={`${Math.round(progress)}% of habits completed`} />
-             </div>
-            <div className="space-y-4 rounded-lg border p-4">
-              {state.habits.map((habit) => (
-                <div key={habit.id} className="flex items-center space-x-3">
-                  <Checkbox
-                    id={`habit-${habit.id}`}
-                    checked={habit.completed}
-                    onCheckedChange={() => handleHabitToggle(habit.id)}
-                  />
-                  <Label
-                    htmlFor={`habit-${habit.id}`}
-                    className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {habit.name}
-                  </Label>
-                </div>
-              ))}
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Progress</span>
+                <span>
+                  {completedHabits} / {totalHabits} completed
+                </span>
+              </div>
+              <Progress value={progress} aria-label={`${Math.round(progress)}% of habits completed`} />
+            </div>
+            <div className="space-y-2 rounded-lg border p-4">
+              {state.habits.length > 0 ? (
+                state.habits.map((habit) => (
+                  <div key={habit.id} className="flex items-center group">
+                    <Checkbox
+                      id={`habit-${habit.id}`}
+                      checked={habit.completed}
+                      onCheckedChange={(checked) => handleHabitToggle(habit.id, !!checked)}
+                      className="h-5 w-5"
+                    />
+                    <Label
+                      htmlFor={`habit-${habit.id}`}
+                      className="ml-3 text-base font-medium flex-1 cursor-pointer"
+                    >
+                      {habit.name}
+                    </Label>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenForm(habit)}>
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">Edit habit</span>
+                       </Button>
+                       <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => handleDeleteHabit(habit.id)}>
+                           <Trash2 className="h-4 w-4" />
+                           <span className="sr-only">Delete habit</span>
+                       </Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-4">
+                  No habits yet. Add one to get started!
+                </p>
+              )}
             </div>
           </div>
         </CardContent>
