@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import type { MoodLog, JournalEntry, Habit } from '@/lib/types';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 interface AppState {
   moodLogs: MoodLog[];
@@ -106,20 +106,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const moodLogsQuery = query(collection(db, 'moodLogs'), orderBy('date', 'desc'));
-        const moodLogsSnapshot = await getDocs(moodLogsQuery);
+        const moodLogsSnapshot = await getDocs(collection(db, 'moodLogs'));
         const moodLogs = moodLogsSnapshot.docs.map(doc => {
           const data = doc.data();
           return { ...data, id: doc.id, date: new Date(data.date) } as MoodLog;
-        });
+        }).sort((a, b) => b.date.getTime() - a.date.getTime());
         dispatch({ type: 'SET_MOOD_LOGS', payload: moodLogs });
 
-        const journalEntriesQuery = query(collection(db, 'journalEntries'), orderBy('date', 'desc'));
-        const journalEntriesSnapshot = await getDocs(journalEntriesQuery);
+        const journalEntriesSnapshot = await getDocs(collection(db, 'journalEntries'));
         const journalEntries = journalEntriesSnapshot.docs.map(doc => {
           const data = doc.data();
           return { ...data, id: doc.id, date: new Date(data.date) } as JournalEntry;
-        });
+        }).sort((a, b) => b.date.getTime() - a.date.getTime());
         dispatch({ type: 'SET_JOURNAL_ENTRIES', payload: journalEntries });
         
         const habitsSnapshot = await getDocs(collection(db, 'habits'));
