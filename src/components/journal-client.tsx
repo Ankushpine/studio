@@ -19,11 +19,15 @@ import { useToast } from '@/hooks/use-toast';
 import { BookHeart, Feather, Sparkles } from 'lucide-react';
 import { getJournalPrompt } from '@/lib/actions';
 import { format } from 'date-fns';
+import { JournalEntry } from '@/lib/types';
+import { ScrollArea } from './ui/scroll-area';
 
 export function JournalClient() {
   const { state, dispatch } = useApp();
   const { toast } = useToast();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isNewEntryDialogOpen, setIsNewEntryDialogOpen] = useState(false);
+  const [isViewEntryDialogOpen, setIsViewEntryDialogOpen] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isPromptLoading, setIsPromptLoading] = useState(false);
@@ -70,8 +74,13 @@ export function JournalClient() {
 
     setTitle('');
     setContent('');
-    setIsDialogOpen(false);
+    setIsNewEntryDialogOpen(false);
   };
+  
+  const handleReadMore = (entry: JournalEntry) => {
+    setSelectedEntry(entry);
+    setIsViewEntryDialogOpen(true);
+  }
 
   return (
     <div className="grid gap-6">
@@ -81,7 +90,7 @@ export function JournalClient() {
             <CardTitle className="font-headline">My Journal</CardTitle>
             <CardDescription>A space for your private thoughts and reflections.</CardDescription>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isNewEntryDialogOpen} onOpenChange={setIsNewEntryDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Feather className="mr-2 h-4 w-4" />
@@ -153,12 +162,33 @@ export function JournalClient() {
                 <p className="line-clamp-4 text-sm text-muted-foreground">{entry.content}</p>
               </CardContent>
               <CardFooter>
-                 <Button variant="link" className="p-0 h-auto">Read More</Button>
+                 <Button variant="link" className="p-0 h-auto" onClick={() => handleReadMore(entry)}>Read More</Button>
               </CardFooter>
             </Card>
           ))}
         </div>
       )}
+
+      <Dialog open={isViewEntryDialogOpen} onOpenChange={setIsViewEntryDialogOpen}>
+        <DialogContent className="sm:max-w-[625px]">
+          {selectedEntry && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-headline">{selectedEntry.title}</DialogTitle>
+                <DialogDescription>
+                  {format(new Date(selectedEntry.date), 'MMMM d, yyyy')}
+                </DialogDescription>
+              </DialogHeader>
+              <ScrollArea className="max-h-[60vh] my-4">
+                <p className="whitespace-pre-wrap text-sm">{selectedEntry.content}</p>
+              </ScrollArea>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsViewEntryDialogOpen(false)}>Close</Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
