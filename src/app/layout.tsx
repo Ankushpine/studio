@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 
 export const metadata: Metadata = {
-  title: 'Zenith Journal',
+  title: 'Clarity Hub',
   description: 'A supportive web app for mental well-being.',
 };
 

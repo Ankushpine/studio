@@ -48,7 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Feather className="h-5 w-5 text-primary-foreground" />
             </div>
             <h1 className="font-headline text-lg font-bold text-primary-foreground/90 group-data-[collapsible=icon]:hidden">
-              Zenith Journal
+              Clarity Hub
             </h1>
           </div>
         </SidebarHeader>

@@ -24,16 +24,14 @@ export function DashboardClient() {
     setHasLoggedMoodToday(state.moodLogs.some(
       (log) => new Date(log.date).toDateString() === today
     ));
-
-    const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
-    setQuote(quotes[dayOfYear % quotes.length]);
+    setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   }, [state.moodLogs]);
 
   return (
     <div className="grid gap-6">
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Welcome to your Zenith Journal</CardTitle>
+          <CardTitle className="font-headline">Welcome to your Clarity Hub</CardTitle>
           <CardDescription>
             Your personal space for reflection and growth.
           </CardDescription>
