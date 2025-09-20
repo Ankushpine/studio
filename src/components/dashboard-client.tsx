@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { ArrowRight, BookHeart, CheckSquare, Smile } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 const quotes = [
     { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" },
@@ -16,16 +16,18 @@ const quotes = [
 
 export function DashboardClient() {
   const { state } = useApp();
-  const today = new Date().toDateString();
+  const [hasLoggedMoodToday, setHasLoggedMoodToday] = useState(false);
+  const [quote, setQuote] = useState<{quote: string; author: string} | null>(null);
 
-  const hasLoggedMoodToday = state.moodLogs.some(
-    (log) => new Date(log.date).toDateString() === today
-  );
+  useEffect(() => {
+    const today = new Date().toDateString();
+    setHasLoggedMoodToday(state.moodLogs.some(
+      (log) => new Date(log.date).toDateString() === today
+    ));
 
-  const quote = useMemo(() => {
     const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
-    return quotes[dayOfYear % quotes.length];
-  }, []);
+    setQuote(quotes[dayOfYear % quotes.length]);
+  }, [state.moodLogs]);
 
   return (
     <div className="grid gap-6">
@@ -43,17 +45,19 @@ export function DashboardClient() {
         </CardContent>
       </Card>
 
-      <Card className="bg-primary/10 border-primary/20">
-        <CardHeader>
-            <CardTitle className="font-headline text-lg">Quote of the Day</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <blockquote className="border-l-4 border-primary pl-4 italic">
-                "{quote.quote}"
-            </blockquote>
-            <p className="mt-2 text-right text-sm text-muted-foreground">- {quote.author}</p>
-        </CardContent>
-      </Card>
+      {quote && (
+        <Card className="bg-primary/10 border-primary/20">
+          <CardHeader>
+              <CardTitle className="font-headline text-lg">Quote of the Day</CardTitle>
+          </CardHeader>
+          <CardContent>
+              <blockquote className="border-l-4 border-primary pl-4 italic">
+                  "{quote.quote}"
+              </blockquote>
+              <p className="mt-2 text-right text-sm text-muted-foreground">- {quote.author}</p>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid md:grid-cols-3 gap-6">
         {!hasLoggedMoodToday && (
