@@ -1,38 +1,12 @@
+
 import type { MoodLog, JournalEntry, Habit, MindfulnessExercise } from './types';
 import { subDays } from 'date-fns';
 
-export const initialMoodLogs: MoodLog[] = [
-  { id: '1', mood: 'happy', notes: 'Had a great day at work.', date: subDays(new Date(), 1) },
-  { id: '2', mood: 'neutral', notes: 'A pretty standard day.', date: subDays(new Date(), 2) },
-  { id: '3', mood: 'sad', notes: 'Feeling a bit down.', date: subDays(new Date(), 3) },
-  { id: '4', mood: 'happy', notes: 'Met up with an old friend.', date: subDays(new Date(), 4) },
-  { id: '5', mood: 'ecstatic', notes: 'Got some amazing news!', date: subDays(new Date(), 5) },
-  { id: '6', mood: 'neutral', notes: 'Relaxing at home.', date: subDays(new Date(), 6) },
-  { id: '7', mood: 'anxious', notes: 'Stressed about the upcoming week.', date: subDays(new Date(), 7) },
-];
+export const initialMoodLogs: MoodLog[] = [];
 
-export const initialJournalEntries: JournalEntry[] = [
-  {
-    id: '1',
-    title: 'A Good Day',
-    content: 'Today was a really good day. I felt productive and happy. I managed to finish a big project at work and received positive feedback. It feels great to have that weight off my shoulders. I should celebrate this small win.',
-    date: subDays(new Date(), 1),
-  },
-  {
-    id: '2',
-    title: 'Reflections on Friendship',
-    content: 'Met up with Sarah today. It has been a while. We talked for hours, and it felt like no time had passed. It is so important to cherish these connections. I feel grateful to have her in my life.',
-    date: subDays(new Date(), 4),
-  },
-];
+export const initialJournalEntries: JournalEntry[] = [];
 
-export const initialHabits: Habit[] = [
-  { id: '1', name: 'Meditate for 10 minutes', completed: true },
-  { id: '2', name: 'Go for a 30-minute walk', completed: false },
-  { id: '3', name: 'Drink 8 glasses of water', completed: true },
-  { id: '4', name: 'Read a chapter of a book', completed: false },
-  { id: '5', name: 'Get 15 minutes of sunlight', completed: true },
-];
+export const initialHabits: Habit[] = [];
 
 export const mindfulnessExercises: MindfulnessExercise[] = [
   {
