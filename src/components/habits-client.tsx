@@ -192,18 +192,14 @@ export function HabitsClient() {
           </CardContent>
         </Card>
       </div>
-      <div>
-        <Card>
-          <CardContent className="p-0">
-            <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                className="w-full"
-            />
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            className="w-full"
+        />
+      </Card>
     </div>
   );
 }
