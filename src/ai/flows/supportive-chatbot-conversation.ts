@@ -1,4 +1,3 @@
-// Implemented SupportiveChatbotConversation flow.
 'use server';
 /**
  * @fileOverview An AI chatbot that provides supportive and empathetic conversation.
@@ -13,7 +12,7 @@ import {z} from 'genkit';
 
 const SupportiveChatbotConversationInputSchema = z.object({
   message: z.string().describe('The user message to the chatbot.'),
-  chatHistory: z.array(z.object({role: z.string(), content: z.string()})).optional().describe('The chat history between the user and the chatbot.')
+  chatHistory: z.array(z.object({role: z.enum(['user', 'assistant']), content: z.string()})).optional().describe('The chat history between the user and the chatbot.')
 });
 export type SupportiveChatbotConversationInput = z.infer<typeof SupportiveChatbotConversationInputSchema>;
 
@@ -46,7 +45,7 @@ const prompt = ai.definePrompt({
 
   Here is the chat history:
   {{#each chatHistory}}
-  {{#if (eq role \"user\")}}
+  {{#if (eq role "user")}}
   User: {{{this.content}}}
   {{else}}
   Chatbot: {{{this.content}}}

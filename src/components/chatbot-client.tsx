@@ -40,7 +40,7 @@ export function ChatbotClient() {
     setIsLoading(true);
 
     try {
-      const chatHistory = messages.map(msg => ({ role: msg.role === 'user' ? 'user' : 'model', content: msg.content }));
+      const chatHistory = messages.map(msg => ({ role: msg.role, content: msg.content }));
       const response = await getChatbotResponse({ message: input, chatHistory });
       
       const botMessage: Message = { role: 'assistant', content: response };
