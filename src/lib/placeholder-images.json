@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "exercise-1",
+      "description": "A calm, serene image for a deep breathing exercise.",
+      "imageUrl": "https://picsum.photos/seed/101/600/400",
+      "imageHint": "serene nature"
+    },
+    {
+      "id": "exercise-2",
+      "description": "An image representing focus and grounding.",
+      "imageUrl": "https://picsum.photos/seed/102/600/400",
+      "imageHint": "forest path"
+    },
+    {
+      "id": "exercise-3",
+      "description": "An image that encourages mindful observation of the surroundings.",
+      "imageUrl": "https://picsum.photos/seed/103/600/400",
+      "imageHint": "mountain landscape"
+    },
+    {
+      "id": "exercise-4",
+      "description": "A peaceful nature scene for a body scan meditation.",
+      "imageUrl": "https://picsum.photos/seed/104/600/400",
+      "imageHint": "calm lake"
+    }
+  ]
 }
