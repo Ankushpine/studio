@@ -2,11 +2,32 @@
 import type { MoodLog, JournalEntry, Habit, MindfulnessExercise } from './types';
 import { subDays } from 'date-fns';
 
-export const initialMoodLogs: MoodLog[] = [];
+export const initialMoodLogs: MoodLog[] = [
+  { id: '1', mood: 'happy', notes: 'Had a great day with friends.', date: subDays(new Date(), 1) },
+  { id: '2', mood: 'neutral', notes: 'A regular day at work.', date: subDays(new Date(), 2) },
+  { id: '3', mood: 'anxious', notes: 'Stressed about the upcoming presentation.', date: subDays(new Date(), 3) },
+];
 
-export const initialJournalEntries: JournalEntry[] = [];
+export const initialJournalEntries: JournalEntry[] = [
+    {
+      id: '1',
+      title: 'A Good Day',
+      content: 'Today was a really good day. I spent time with friends and felt genuinely happy and connected. It\'s moments like these that I cherish.',
+      date: subDays(new Date(), 1),
+    },
+    {
+      id: '2',
+      title: 'Project deadline',
+      content: 'Feeling the pressure of the project deadline. I need to focus and get it done. A bit stressed, but I know I can handle it.',
+      date: subDays(new Date(), 3),
+    },
+];
 
-export const initialHabits: Habit[] = [];
+export const initialHabits: Habit[] = [
+  { id: '1', name: 'Meditate for 10 minutes', completed: true },
+  { id: '2', name: 'Read for 20 minutes', completed: false },
+  { id: '3', name: 'Go for a walk', completed: true },
+];
 
 export const mindfulnessExercises: MindfulnessExercise[] = [
   {

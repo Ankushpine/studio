@@ -3,8 +3,7 @@
 
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import type { MoodLog, JournalEntry, Habit } from '@/lib/types';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { initialHabits, initialJournalEntries, initialMoodLogs } from '@/lib/data';
 
 interface AppState {
   moodLogs: MoodLog[];
@@ -48,9 +47,9 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case 'SET_HABITS':
       return { ...state, habits: action.payload };
     case 'ADD_MOOD_LOG':
-      return { ...state, moodLogs: [action.payload, ...state.moodLogs] };
+      return { ...state, moodLogs: [action.payload, ...state.moodLogs].sort((a, b) => b.date.getTime() - a.date.getTime()) };
     case 'ADD_JOURNAL_ENTRY':
-      return { ...state, journalEntries: [action.payload, ...state.journalEntries] };
+      return { ...state, journalEntries: [action.payload, ...state.journalEntries].sort((a, b) => b.date.getTime() - a.date.getTime()) };
     case 'TOGGLE_HABIT':
       return {
         ...state,
@@ -74,100 +73,19 @@ function appReducer(state: AppState, action: AppAction): AppState {
   }
 }
 
-async function addHabitToDB(habit: Habit) {
-  await setDoc(doc(db, 'habits', habit.id), habit);
-}
-
-async function updateHabitInDB(habit: Habit) {
-  await setDoc(doc(db, 'habits', habit.id), habit, { merge: true });
-}
-
-async function deleteHabitFromDB(habitId: string) {
-  await deleteDoc(doc(db, 'habits', habitId));
-}
-
-async function addJournalEntryToDB(entry: JournalEntry) {
-  await setDoc(doc(db, 'journalEntries', entry.id), {
-    ...entry,
-    date: entry.date.toISOString(),
-  });
-}
-
-async function addMoodLogToDB(log: MoodLog) {
-  await setDoc(doc(db, 'moodLogs', log.id), {
-    ...log,
-    date: log.date.toISOString(),
-  });
-}
-
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const moodLogsSnapshot = await getDocs(collection(db, 'moodLogs'));
-        const moodLogs = moodLogsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return { ...data, id: doc.id, date: new Date(data.date) } as MoodLog;
-        }).sort((a, b) => b.date.getTime() - a.date.getTime());
-        dispatch({ type: 'SET_MOOD_LOGS', payload: moodLogs });
-
-        const journalEntriesSnapshot = await getDocs(collection(db, 'journalEntries'));
-        const journalEntries = journalEntriesSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return { ...data, id: doc.id, date: new Date(data.date) } as JournalEntry;
-        }).sort((a, b) => b.date.getTime() - a.date.getTime());
-        dispatch({ type: 'SET_JOURNAL_ENTRIES', payload: journalEntries });
-        
-        const habitsSnapshot = await getDocs(collection(db, 'habits'));
-        const habits = habitsSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Habit);
-        dispatch({ type: 'SET_HABITS', payload: habits });
-      } catch (error) {
-        console.error("Error fetching data from Firestore:", error);
-      } finally {
-        dispatch({ type: 'SET_LOADING', payload: false });
-      }
-    }
-    fetchData();
+    dispatch({ type: 'SET_LOADING', payload: true });
+    // Simulate fetching data
+    setTimeout(() => {
+      dispatch({ type: 'SET_MOOD_LOGS', payload: initialMoodLogs });
+      dispatch({ type: 'SET_JOURNAL_ENTRIES', payload: initialJournalEntries });
+      dispatch({ type: 'SET_HABITS', payload: initialHabits });
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }, 500);
   }, []);
-
-
-  const enhancedDispatch = async (action: AppAction) => {
-    // Optimistic UI update
-    dispatch(action);
-
-    try {
-      switch (action.type) {
-        case 'ADD_HABIT':
-          await addHabitToDB(action.payload);
-          break;
-        case 'UPDATE_HABIT':
-          await updateHabitInDB(action.payload);
-          break;
-        case 'TOGGLE_HABIT':
-            const habitToToggle = state.habits.find(h => h.id === action.payload.id);
-            if(habitToToggle) {
-                await updateHabitInDB({ ...habitToToggle, completed: action.payload.completed });
-            }
-          break;
-        case 'DELETE_HABIT':
-          await deleteHabitFromDB(action.payload);
-          break;
-        case 'ADD_JOURNAL_ENTRY':
-          await addJournalEntryToDB(action.payload);
-          break;
-        case 'ADD_MOOD_LOG':
-          await addMoodLogToDB(action.payload);
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.error("Firestore write operation failed:", error);
-      // Here you might want to dispatch an action to revert the state
-    }
-  };
 
   if (state.loading) {
     return (
@@ -178,7 +96,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AppContext.Provider value={{ state, dispatch: enhancedDispatch as React.Dispatch<AppAction> }}>
+    <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
   );
