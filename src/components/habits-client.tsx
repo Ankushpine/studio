@@ -192,12 +192,12 @@ export function HabitsClient() {
           </CardContent>
         </Card>
       </div>
-      <Card>
+      <Card className="flex justify-center">
         <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="w-full"
+            className="p-0"
         />
       </Card>
     </div>
