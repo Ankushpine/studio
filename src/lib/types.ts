@@ -17,8 +17,13 @@ export type JournalEntry = {
 export type Habit = {
   id: string;
   name: string;
-  completed: boolean;
 };
+
+export type HabitCompletion = {
+  habitId: string;
+  date: string; // YYYY-MM-DD
+  completed: boolean;
+}
 
 export type MindfulnessExercise = {
   id: string;

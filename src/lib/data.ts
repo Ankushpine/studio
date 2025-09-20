@@ -1,6 +1,6 @@
 
-import type { MoodLog, JournalEntry, Habit, MindfulnessExercise } from './types';
-import { subDays } from 'date-fns';
+import type { MoodLog, JournalEntry, Habit, MindfulnessExercise, HabitCompletion } from './types';
+import { subDays, format } from 'date-fns';
 
 export const initialMoodLogs: MoodLog[] = [
   { id: '1', mood: 'happy', notes: 'Had a great day with friends.', date: subDays(new Date(), 1) },
@@ -24,9 +24,18 @@ export const initialJournalEntries: JournalEntry[] = [
 ];
 
 export const initialHabits: Habit[] = [
-  { id: '1', name: 'Meditate for 10 minutes', completed: true },
-  { id: '2', name: 'Read for 20 minutes', completed: false },
-  { id: '3', name: 'Go for a walk', completed: true },
+  { id: '1', name: 'Meditate for 10 minutes' },
+  { id: '2', name: 'Read for 20 minutes' },
+  { id: '3', name: 'Go for a walk' },
+];
+
+export const initialHabitCompletions: HabitCompletion[] = [
+    { habitId: '1', date: format(new Date(), 'yyyy-MM-dd'), completed: true },
+    { habitId: '2', date: format(new Date(), 'yyyy-MM-dd'), completed: false },
+    { habitId: '3', date: format(new Date(), 'yyyy-MM-dd'), completed: true },
+    { habitId: '1', date: format(subDays(new Date(), 1), 'yyyy-MM-dd'), completed: true },
+    { habitId: '2', date: format(subDays(new Date(), 1), 'yyyy-MM-dd'), completed: true },
+    { habitId: '3', date: format(subDays(new Date(), 1), 'yyyy-MM-dd'), completed: false },
 ];
 
 export const mindfulnessExercises: MindfulnessExercise[] = [
